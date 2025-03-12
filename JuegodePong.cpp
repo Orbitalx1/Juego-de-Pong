@@ -47,6 +47,25 @@ void display() {
     glutSwapBuffers();
 }
 
+void keyboard(unsigned char key, int x, int y) {
+    switch (key) {
+        case 'w': // Mover jugador 1 hacia arriba
+            if (jugador1 < 0.8f) jugador1 += 0.1f;
+            break;
+        case 's': // Mover jugador 1 hacia abajo
+            if (jugador1 > -0.8f) jugador1 -= 0.1f;
+            break;
+        case 'o': // Mover jugador 2 hacia arriba
+            if (jugador2 < 0.8f) jugador2 += 0.1f;
+            break;
+        case 'l': // Mover jugador 2 hacia abajo
+            if (jugador2 > -0.8f) jugador2 -= 0.1f;
+            break;
+    }
+    glutPostRedisplay(); // Actualizar la pantalla
+}
+
+
 void init() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
