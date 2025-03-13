@@ -1,5 +1,6 @@
 #include <GL/glut.h>
 #include <math.h>
+#include <stdio.h>
 
 // Dimensiones
 const int Ancho = 800;
@@ -10,6 +11,10 @@ float jugador1 = 0.0f;
 float jugador2 = 0.0f;
 float PelotaX = 0.0f, PelotaY = 0.0f;
 float PelotaDX = 0.01f, PelotaDY = 0.01f; 
+
+// Puntuación
+int puntuacionJugador1 = 0;
+int puntuacionJugador2 = 0;
 
 #define PI 3.1415926535898
 GLint circle_points = 100;
@@ -54,10 +59,6 @@ void display() {
     glTranslatef(PelotaX, PelotaY, 0.0f);
     glColor3f(1.0f, 0.0f, 0.0f); // Color rojo
     MyCircle2f(0.0f, 0.0f, 0.05f); // Dibujar círculo de radio 0.05
-
-
-
-
     glPopMatrix();
     glutSwapBuffers();
 }
@@ -71,8 +72,28 @@ void update(int value) {
         PelotaDY = -PelotaDY; 
     }
 
-    // Reiniciar pelota si sale por los lados
-    if (PelotaX > 1.0f || PelotaX < -1.0f) {
+     // Colisión con paleta izquierda
+     if (PelotaX < -0.85f && PelotaX > -0.9f && 
+        PelotaY < jugador1 + 0.2f && PelotaY > jugador1 - 0.2f) {
+        PelotaDX = -PelotaDX; 
+    }
+
+    // Colisión con paleta derecha
+    if (PelotaX > 0.85f && PelotaX < 0.9f &&
+        PelotaY < jugador2 + 0.2f && PelotaY > jugador2 - 0.2f) {
+        PelotaDX = -PelotaDX;
+    }
+
+    // Reiniciar pelota si sale por los lados y actualizar puntuación
+    if (PelotaX > 1.0f) {
+        puntuacionJugador1++;
+        printf("Puntuación: Jugador 1 = %d, Jugador 2 = %d\n", puntuacionJugador1, puntuacionJugador2);
+        PelotaX = 0.0f;
+        PelotaY = 0.0f; 
+    }
+    if (PelotaX < -1.0f) {
+        puntuacionJugador2++;
+        printf("Puntuación: Jugador 1 = %d, Jugador 2 = %d\n", puntuacionJugador1, puntuacionJugador2);
         PelotaX = 0.0f;
         PelotaY = 0.0f; 
     }
@@ -114,5 +135,5 @@ int main(int argc, char** argv) {
     glutKeyboardFunc(keyboard);
     glutTimerFunc(0, update, 0); 
     glutMainLoop();
-    return 0;
+    return 0;
 }
